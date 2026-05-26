@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MMM Learning Lab</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="topbar">
+        <div>
+          <p class="eyebrow">Marketing Mix Modelling</p>
+          <h1>MMM Learning Lab</h1>
+        </div>
+        <div class="scenario-tabs" aria-label="Scenario selector">
+          <button class="tab active" data-scenario="balanced">Balanced</button>
+          <button class="tab" data-scenario="digital">Digital Push</button>
+          <button class="tab" data-scenario="brand">Brand Build</button>
+          <button class="tab" data-scenario="promo">Promo Week</button>
+        </div>
+      </section>
+
+      <section class="scenario-guide" aria-label="Scenario explanation">
+        <div>
+          <p class="eyebrow">Meridian-style MMM lens</p>
+          <h2 id="scenarioTitle">Balanced mix</h2>
+        </div>
+        <p id="scenarioExample"></p>
+        <p id="scenarioExplanation"></p>
+      </section>
+
+      <section class="learning-path" aria-label="How marketing mix modelling works">
+        <article class="lesson-main">
+          <p class="eyebrow">Start here</p>
+          <h2>MMM estimates what changed sales, then helps decide where the next budget should go.</h2>
+          <p>
+            It looks at historical sales, marketing spend, and outside factors over time. The model separates base demand from extra sales caused by media, then compares channels by sales impact, ROI, saturation, and next-dollar return.
+          </p>
+        </article>
+        <article class="lesson-step">
+          <span>1</span>
+          <strong>Collect the data</strong>
+          <p>Bring together weekly sales, channel spend, price, promotions, seasonality, and competitor signals.</p>
+        </article>
+        <article class="lesson-step">
+          <span>2</span>
+          <strong>Explain what happened</strong>
+          <p>Estimate how much sales came from baseline demand, outside factors, and each media channel.</p>
+        </article>
+        <article class="lesson-step">
+          <span>3</span>
+          <strong>Choose the next move</strong>
+          <p>Compare budget options and pick the mix with the best business trade-off.</p>
+        </article>
+      </section>
+
+      <section class="concept-grid" aria-label="Core MMM concepts">
+        <article class="concept">
+          <strong>Base demand</strong>
+          <p>Sales you may get without this week&apos;s media, driven by brand, distribution, habit, seasonality, price, and market conditions.</p>
+        </article>
+        <article class="concept">
+          <strong>Controls</strong>
+          <p>Non-media factors such as price, holidays, competitor activity, weather, and promotions. These stop media taking credit for everything.</p>
+        </article>
+        <article class="concept">
+          <strong>Media impact</strong>
+          <p>The estimated sales caused by a channel after accounting for baseline demand and outside factors.</p>
+        </article>
+        <article class="concept">
+          <strong>Saturation</strong>
+          <p>When a channel still works, but each extra dollar creates less lift than the previous dollar.</p>
+        </article>
+      </section>
+
+      <section class="summary-grid" aria-label="Scenario results">
+        <article class="metric">
+          <span>Expected Sales</span>
+          <strong id="salesMetric">0</strong>
+          <small id="salesDelta">0 vs baseline</small>
+        </article>
+        <article class="metric">
+          <span>Incremental Revenue</span>
+          <strong id="revenueMetric">$0</strong>
+          <small>Sales lift x price</small>
+        </article>
+        <article class="metric">
+          <span>Marketing ROI</span>
+          <strong id="roiMetric">0.0x</strong>
+          <small id="roiHint">Revenue / spend</small>
+        </article>
+        <article class="metric decision">
+          <span>Decision Signal</span>
+          <strong id="decisionMetric">-</strong>
+          <small id="decisionHint">Adjust the mix to learn</small>
+        </article>
+      </section>
+
+      <section class="workspace">
+        <aside class="panel controls-panel">
+          <div class="panel-heading">
+            <h2>Inputs</h2>
+            <button id="resetButton" class="icon-button" title="Reset scenario" aria-label="Reset scenario">Reset</button>
+          </div>
+
+          <div class="control-group">
+            <label for="budget">Budget to optimise</label>
+            <p class="control-help">The total media budget the optimiser can allocate across Search, Social, TV, and Promotions.</p>
+            <div class="range-row">
+              <input id="budget" type="range" min="40" max="220" step="5" value="120" />
+              <output id="budgetValue"></output>
+            </div>
+            <button id="applyOptimizedButton" class="wide-button" type="button">Apply recommended mix</button>
+          </div>
+
+          <div class="control-group">
+            <label for="price">Average price</label>
+            <p class="control-help">The average selling price for one unit. Teams measure this from sales, ecommerce, POS, or finance data.</p>
+            <div class="range-row">
+              <input id="price" type="range" min="15" max="120" value="45" />
+              <output id="priceValue"></output>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label for="seasonality">Seasonality</label>
+            <p class="control-help">Estimated natural demand lift or drag from timing, such as holidays, weather, paydays, school terms, or category cycles.</p>
+            <div class="range-row">
+              <input id="seasonality" type="range" min="-20" max="30" value="5" />
+              <output id="seasonalityValue"></output>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label for="competitor">Competitor pressure</label>
+            <p class="control-help">Estimated demand lost to competitors. It can be proxied with competitor spend, share of search, price gaps, promotions, or market share movement.</p>
+            <div class="range-row">
+              <input id="competitor" type="range" min="0" max="30" value="8" />
+              <output id="competitorValue"></output>
+            </div>
+          </div>
+
+          <div class="channels" id="channelControls"></div>
+        </aside>
+
+        <section class="visuals">
+          <article class="panel chart-panel">
+            <div class="panel-heading">
+              <h2>Sales Decomposition</h2>
+              <span id="totalSpend"></span>
+            </div>
+            <canvas id="decompositionChart" width="920" height="360" aria-label="Sales decomposition chart"></canvas>
+          </article>
+
+          <article class="panel chart-panel">
+            <div class="panel-heading">
+              <h2>Response Curves</h2>
+              <span>Diminishing returns by channel</span>
+            </div>
+            <canvas id="responseChart" width="920" height="300" aria-label="Marketing response curve chart"></canvas>
+            <div class="curve-guide" id="curveGuide"></div>
+          </article>
+
+          <article class="panel optimizer-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Budget planner with uncertainty</p>
+                <h2>Recommended Budget Mix</h2>
+              </div>
+              <span id="optimizerBudget"></span>
+            </div>
+            <p class="model-note">
+              This tests many budget splits and allows for uncertainty in each channel&apos;s sales response. Instead of one overly precise answer, it shows a likely range.
+            </p>
+            <div class="optimizer-grid" id="optimizerMix"></div>
+          </article>
+
+          <article class="panel uncertainty-panel">
+            <div>
+              <p class="eyebrow">Uncertainty</p>
+              <h2>How confident should we be?</h2>
+            </div>
+            <div class="uncertainty-grid">
+              <div>
+                <span>Current mix media sales</span>
+                <strong id="currentInterval">-</strong>
+                <p>Likely range for extra sales from the current media mix.</p>
+              </div>
+              <div>
+                <span>Recommended mix media sales</span>
+                <strong id="optimizedInterval">-</strong>
+                <p>Likely range for extra sales from the recommended mix.</p>
+              </div>
+              <div>
+                <span>Confidence to improve</span>
+                <strong id="confidenceMetric">-</strong>
+                <p>How often the recommendation beats the current mix in the uncertainty test.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel insight-panel">
+            <h2>What This Scenario Teaches</h2>
+            <div id="insights" class="insights"></div>
+          </article>
+
+          <article class="panel tradeoff-panel">
+            <div>
+              <p class="eyebrow">Trade-off analysis</p>
+              <h2>Current mix vs recommended mix</h2>
+            </div>
+            <div class="tradeoff-table" id="tradeoffTable"></div>
+          </article>
+
+          <article class="panel explainer-panel">
+            <div>
+              <p class="eyebrow">Read the model</p>
+              <h2>What the current numbers mean</h2>
+            </div>
+            <div class="explain-grid">
+              <div>
+                <strong id="baselineText">Baseline</strong>
+                <p>Base sales plus price, seasonality, and competitor effects before media impact.</p>
+              </div>
+              <div>
+                <strong id="mediaText">Media impact</strong>
+                <p>Incremental sales attributed to Search, Social, TV, and Promotions.</p>
+              </div>
+              <div>
+                <strong id="nextDollarText">Best next dollar</strong>
+                <p>The channel with the strongest marginal return at the current spend level.</p>
+              </div>
+            </div>
+          </article>
+        </section>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
