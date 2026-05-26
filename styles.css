@@ -284,6 +284,8 @@ h2 {
 
 .controls-panel {
   align-self: start;
+  max-height: calc(100vh - 36px);
+  overflow-y: auto;
   position: sticky;
   top: 18px;
 }
