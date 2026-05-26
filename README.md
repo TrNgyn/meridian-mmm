@@ -2,6 +2,14 @@
 
 An interactive browser-based simulator for learning Marketing Mix Modelling (MMM) concepts, inspired by the Meridian MMM framework.
 
+## Screenshots
+
+![Learning overview and scenario selector](docs/screenshot-overview.png)
+
+![Sales decomposition, response curves, and budget optimizer](docs/screenshot-simulator.png)
+
+![Recommended budget mix, uncertainty analysis, and scenario teaching](docs/screenshot-optimizer.png)
+
 ## What it does
 
 The app lets you explore how media spend, price, seasonality, and competitor pressure combine to drive sales. You can adjust budget and channel allocations in real time and immediately see:
@@ -41,13 +49,6 @@ open index.html
 
 Use the left panel to change the total budget, average price, seasonality lift/drag, competitor pressure, and per-channel spend. Click **Apply recommended mix** to apply the optimizer's suggestion, or **Reset** to restore the active scenario's defaults.
 
-## File structure
-
-```
-index.html   — layout and all UI markup
-app.js       — model, optimizer, uncertainty, and Canvas charts
-styles.css   — design tokens and responsive grid layout
-```
 
 ## Key parameters (app.js)
 
